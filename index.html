@@ -171,18 +171,38 @@
     </div>
 </article>
 <script>
-
-
-  const scriptURL = 'https://script.google.com/macros/s/AKfycbwmn-kDblo7_Ng4xpM4mo5drl_e3p4arG6JAPJ1-uyk_c37LP0jzRj3aumODb5lF983aQ/exec'
-  const form = document.forms['submit-to-google-sheet']
-
-  form.addEventListener('submit', e => {
-    e.preventDefault()
-    fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-      .then(response => console.log('Success!', response))
-      .catch(error => console.error('Error!', error.message))
-  })
-</script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwmn-kDblo7_Ng4xpM4mo5drl_e3p4arG6JAPJ1-uyk_c37LP0jzRj3aumODb5lF983aQ/exec';
+    const form = document.forms['submit-to-google-sheet'];
+  
+    // Create a message div for displaying messages
+    const messageDiv = document.createElement("div");
+    messageDiv.style.color = "green"; // Style the message
+    messageDiv.style.marginTop = "10px";
+    messageDiv.style.fontWeight = "bold"; 
+  
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+  
+      fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+        .then(response => {
+          messageDiv.textContent = "Message sent successfully!";
+          form.appendChild(messageDiv); // Append the message to the form
+          form.reset(); // Reset the form fields
+          console.log('Success!', response);
+          
+          // Remove the message after 3 seconds
+          setTimeout(() => {
+            messageDiv.textContent = "";
+          }, 3000);
+        })
+        .catch(error => {
+          messageDiv.textContent = "Error! " + error.message;
+          messageDiv.style.color = "red"; // Change color for error message
+          form.appendChild(messageDiv);
+          console.error('Error!', error);
+        });
+    });
+  </script>
 
 
 </script>
